@@ -1,7 +1,7 @@
 /**
- * @yours-truly/node — official Node.js SDK for the Yours Truly email API.
+ * @saalr-io/yours-truly — official Node.js SDK for the Yours Truly email API.
  *
- *   import { YoursTruly } from "@yours-truly/node";
+ *   import { YoursTruly } from "@saalr-io/yours-truly";
  *   const yt = new YoursTruly(process.env.YT_API_KEY);
  *   await yt.emails.send({ from, to, subject, html });
  *

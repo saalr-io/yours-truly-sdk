@@ -1,5 +1,5 @@
 {
-  "name": "@yours-truly/node",
+  "name": "@saalr-io/yours-truly",
   "version": "0.1.0",
   "description": "Official Node.js SDK for the Yours Truly email API.",
   "license": "MIT",

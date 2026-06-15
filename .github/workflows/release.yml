@@ -1,8 +1,8 @@
 name: Publish to npm
 
-# Publishes @yours-truly/node when you publish a GitHub Release.
+# Publishes @saalr-io/yours-truly when you publish a GitHub Release.
 # Requires a repository secret NPM_TOKEN (an npm automation token with
-# publish rights to the @yours-truly scope).
+# publish rights to the @saalr-io scope).
 on:
   release:
     types: [published]

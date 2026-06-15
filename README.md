@@ -1,4 +1,4 @@
-# @yours-truly/node
+# @saalr-io/yours-truly
 
 Official Node.js SDK for the [Yours Truly](https://yourstrulymail.com) email API.
 A thin, typed wrapper over the REST API — methods resolve to the parsed response
@@ -7,13 +7,13 @@ and throw `YoursTrulyError` on a non-2xx status.
 ## Install
 
 ```bash
-npm install @yours-truly/node
+npm install @saalr-io/yours-truly
 ```
 
 ## Quickstart
 
 ```ts
-import { YoursTruly } from "@yours-truly/node";
+import { YoursTruly } from "@saalr-io/yours-truly";
 
 const yt = new YoursTruly(process.env.YT_API_KEY);
 
@@ -52,7 +52,7 @@ Environment fallbacks (when no key/baseUrl is passed):
 ## Errors
 
 ```ts
-import { YoursTruly, YoursTrulyError } from "@yours-truly/node";
+import { YoursTruly, YoursTrulyError } from "@saalr-io/yours-truly";
 
 try {
   await yt.emails.send({ /* … */ });
