@@ -22,7 +22,7 @@
     "build": "tsup",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "prepublishOnly": "npm run build"
+    "prepare": "npm run build"
   },
   "keywords": ["email", "api", "sdk", "yours-truly", "transactional", "ses"],
   "repository": { "type": "git", "url": "git+https://github.com/saalr-io/yours-truly-sdk.git" },
