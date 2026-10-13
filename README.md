@@ -12,19 +12,41 @@ npm install @saalr-io/yours-truly
 
 ## Quickstart
 
+Save this as `send.ts`:
+
 ```ts
 import { YoursTruly } from "@saalr-io/yours-truly";
 
 const yt = new YoursTruly(process.env.YT_API_KEY);
 
-const { id, status } = await yt.emails.send({
-  from: "hello@yourstrulymail.com",
-  to: ["you@example.com"],
-  subject: "Email that lands",
-  html: "<strong>Yours, truly.</strong>",
+async function main() {
+  const { id, status } = await yt.emails.send({
+    from: "hello@yourdomain.com", // must be on a domain you've verified
+    to: ["you@example.com"],
+    subject: "Email that lands",
+    html: "<strong>Yours, truly.</strong>",
+  });
+  console.log("Sent", id, status); // → Sent email_… sent
+}
+
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
 });
-// → { id: "email_…", status: "sent" }
 ```
+
+Run it (any Node 18+ project, CommonJS or ESM):
+
+```bash
+# macOS / Linux
+YT_API_KEY=yt_live_… npx tsx send.ts
+
+# Windows PowerShell
+$env:YT_API_KEY = "yt_live_…"; npx tsx send.ts
+```
+
+The `from` address must be on a domain you've verified in Yours Truly, or the
+API rejects it with `domain_not_verified`.
 
 ## Configuration
 

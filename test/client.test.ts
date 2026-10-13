@@ -66,6 +66,18 @@ describe("YoursTruly SDK", () => {
       .rejects.toMatchObject({ name: "YoursTrulyError", status: 422, code: "validation_error" });
   });
 
+  it("UT-SDK-06b: reads the API's nested { error: { code, message, details } } shape", async () => {
+    const f = mockFetch(422, { error: { code: "domain_not_verified", message: "Sender domain is not verified", details: { domain: "x.com" } } });
+    await expect(new YoursTruly({ apiKey: "yt_live_x", baseUrl: "https://api.test", fetch: f }).emails.send({ from: "a@x.com", to: "b@y.com", subject: "s", text: "t" }))
+      .rejects.toMatchObject({ name: "YoursTrulyError", status: 422, code: "domain_not_verified", message: "Sender domain is not verified", details: { domain: "x.com" } });
+  });
+
+  it("UT-SDK-06c: falls back to a status message when the body has no error", async () => {
+    const f = mockFetch(500, {});
+    await expect(new YoursTruly({ apiKey: "yt_live_x", baseUrl: "https://api.test", fetch: f }).emails.list())
+      .rejects.toMatchObject({ status: 500, code: "request_failed", message: "Request failed with status 500" });
+  });
+
   it("UT-SDK-07: accepts a bare api-key string and requires a key", () => {
     expect(() => new YoursTruly("yt_k")).not.toThrow();
     expect(() => new YoursTruly({ apiKey: "" })).toThrow(YoursTrulyError);
