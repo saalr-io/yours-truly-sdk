@@ -10,7 +10,9 @@
  */
 
 const DEFAULT_BASE_URL = "https://api.yourstrulymail.com";
-const VERSION = "0.0.0";
+declare const __SDK_VERSION__: string | undefined;
+/** Injected from package.json at build time (tsup.config.ts). */
+const VERSION = typeof __SDK_VERSION__ === "string" ? __SDK_VERSION__ : "dev";
 
 export interface YoursTrulyOptions {
   /** Your API key (Bearer token). Falls back to YT_API_KEY / YOURS_TRULY_API_KEY. */
@@ -186,11 +188,33 @@ export class YoursTruly {
       try { data = JSON.parse(text); } catch { data = { message: text }; }
     }
     if (!res.ok) {
-      const e = (data && typeof data === "object" ? data : {}) as { error?: string; message?: string; details?: unknown };
-      throw new YoursTrulyError(res.status, e.error ?? "request_failed", e.message ?? `Request failed with status ${res.status}`, e.details);
+      const { code, message, details } = parseError(data);
+      throw new YoursTrulyError(res.status, code ?? "request_failed", message ?? `Request failed with status ${res.status}`, details);
     }
     return data as T;
   }
 }
 
 export default YoursTruly;
+
+/**
+ * The API returns `{ error: { code, message, details } }`. Older/flat shapes
+ * (`{ error: "code", message }`) are accepted too.
+ */
+function parseError(data: unknown): { code?: string; message?: string; details?: unknown } {
+  if (!data || typeof data !== "object") return {};
+  const body = data as { error?: unknown; message?: unknown; details?: unknown };
+  if (body.error && typeof body.error === "object") {
+    const e = body.error as { code?: unknown; message?: unknown; details?: unknown };
+    return {
+      code: typeof e.code === "string" ? e.code : undefined,
+      message: typeof e.message === "string" ? e.message : undefined,
+      details: e.details,
+    };
+  }
+  return {
+    code: typeof body.error === "string" ? body.error : undefined,
+    message: typeof body.message === "string" ? body.message : undefined,
+    details: body.details,
+  };
+}
